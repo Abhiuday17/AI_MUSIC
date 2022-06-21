@@ -1,5 +1,9 @@
 song_1 = ""
 song_2 = ""
+leftWristX = 0;
+leftWristY = 0;
+rightWristX = 0;
+rightWristY = 0;
 
 function setup(){
     canvas  = createCanvas(600,500)
@@ -7,6 +11,9 @@ function setup(){
 
     video = createCapture(VIDEO)
     video.hide()
+
+    poseNet = ml5.poseNet(video,modelLoaded)
+    poseNet.on('pose' , gotPoses)
 }
 
 function preload(){
@@ -20,4 +27,22 @@ function draw(){
 
 function play_1(){
     song.play()
+}
+
+function modelLoaded(){
+    console.log("poseNet is inisialized")
+}
+
+function gotPoses(results){
+
+    if(results.length > 0 ){
+        console.log(results)
+        leftWristX = results[0].pose.leftWrist.x
+        leftWristY = results[0].pose.leftWrist.y
+        rightWristX = results[0].pose.rightWrist.x
+        rightWristX = results[0].pose.rightWrist.y
+
+        console.log(leftWristX , leftWristY)
+        console.log(rightWristX , rightWristY)
+    }
 }
